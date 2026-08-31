@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0,
+        maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>Quick Gram</title>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #111827;
+            min-height: 100vh;
+        }
+
+        .app {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: #229ed9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .header p {
+            color: #6b7280;
+            margin-top: 3px;
+        }
+
+        .balance {
+            background: linear-gradient(135deg, #229ed9, #1677b8);
+            color: white;
+            padding: 25px;
+            border-radius: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(34,158,217,.25);
+        }
+
+        .balance-title {
+            opacity: .85;
+            font-size: 14px;
+        }
+
+        .balance-number {
+            font-size: 38px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .coin {
+            font-size: 18px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 5px 18px rgba(0,0,0,.06);
+            cursor: pointer;
+        }
+
+        .card:active {
+            transform: scale(.97);
+        }
+
+        .icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .card p {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .welcome {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .welcome h2 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #6b7280;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="header">
+
+        <div class="logo">
+            Q
+        </div>
+
+        <div>
+            <h1>Quick Gram</h1>
+            <p id="username">Loading...</p>
+        </div>
+
+    </div>
+
+
+    <div class="balance">
+
+        <div class="balance-title">
+            Your Balance
+        </div>
+
+        <div class="balance-number">
+            <span id="balance">0</span>
+            <span class="coin">Quicks</span>
+        </div>
+
+    </div>
+
+
+    <div class="grid">
+
+        <div class="card" onclick="openPage('earn')">
+            <div class="icon">📺</div>
+            <h3>Earn</h3>
+            <p>Watch ads and earn</p>
+        </div>
+
+
+        <div class="card" onclick="openPage('tasks')">
+            <div class="icon">📝</div>
+            <h3>Tasks</h3>
+            <p>Complete tasks</p>
+        </div>
+
+
+        <div class="card" onclick="openPage('referral')">
+            <div class="icon">👥</div>
+            <h3>Refer</h3>
+            <p>Invite friends</p>
+        </div>
+
+
+        <div class="card" onclick="openPage('withdraw')">
+            <div class="icon">💰</div>
+            <h3>Withdraw</h3>
+            <p>Withdraw Quicks</p>
+        </div>
+
+    </div>
+
+
+    <div class="welcome">
+
+        <h2>Welcome to Quick Gram! 👋</h2>
+
+        <p>
+            Complete tasks, watch ads and invite friends
+            to earn Quicks.
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const tg = window.Telegram.WebApp;
+
+    tg.ready();
+    tg.expand();
+
+
+    const user = tg.initDataUnsafe?.user;
+
+    if (user) {
+
+        let name = user.first_name || "User";
+
+        document.getElementById("username").textContent =
+            "Hello, " + name + "!";
+
+    } else {
+
+        document.getElementById("username").textContent =
+            "Telegram User";
+
+    }
+
+
+    function openPage(page) {
+
+        tg.showAlert(
+            page.toUpperCase() +
+            " section will be added in the next stage."
+        );
+
+    }
+
+</script>
+
+</body>
+</html>
