@@ -189,9 +189,9 @@
         }
 
 
-        /* =========================================
-           REFERRAL PAGE
-        ========================================= */
+        /* =====================================
+           REFERRAL
+           ===================================== */
 
 
         .referral-card {
@@ -213,6 +213,36 @@
         .referral-card p {
             color: #6b7280;
             line-height: 1.5;
+        }
+
+
+        .referral-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+
+            margin-top: 18px;
+        }
+
+
+        .stat {
+            background: #f4f7fb;
+            border-radius: 14px;
+            padding: 15px;
+            text-align: center;
+        }
+
+
+        .stat-number {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+
+        .stat-label {
+            font-size: 12px;
+            color: #6b7280;
         }
 
 
@@ -286,47 +316,6 @@
             font-weight: bold;
         }
 
-
-        .referral-stats {
-            display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap: 12px;
-
-            margin-top: 15px;
-        }
-
-
-        .stat-box {
-            background: #f4f7fb;
-
-            border-radius: 12px;
-
-            padding: 15px;
-
-            text-align: center;
-        }
-
-
-        .stat-number {
-            font-size: 23px;
-
-            font-weight: bold;
-
-            color: #229ed9;
-
-            margin-top: 5px;
-        }
-
-
-        .stat-label {
-            font-size: 12px;
-
-            color: #6b7280;
-        }
-
     </style>
 
 </head>
@@ -335,15 +324,13 @@
 <body>
 
 
-<div
-    class="app"
-    id="mainApp"
->
+<div class="app" id="mainApp">
 
 
     <!-- =====================================
          HEADER
-    ====================================== -->
+         ===================================== -->
+
 
     <div class="header">
 
@@ -351,13 +338,11 @@
             Q
         </div>
 
-
         <div>
 
             <h1>
                 Quick Gram
             </h1>
-
 
             <p id="username">
                 Connecting...
@@ -370,7 +355,8 @@
 
     <!-- =====================================
          BALANCE
-    ====================================== -->
+         ===================================== -->
+
 
     <div class="balance">
 
@@ -378,13 +364,11 @@
             Your Balance
         </div>
 
-
         <div class="balance-number">
 
             <span id="balance">
                 0
             </span>
-
 
             <span class="coin">
                 Quicks
@@ -397,7 +381,8 @@
 
     <!-- =====================================
          MAIN BUTTONS
-    ====================================== -->
+         ===================================== -->
+
 
     <div class="grid">
 
@@ -413,11 +398,9 @@
                 📺
             </div>
 
-
             <h3>
                 Earn
             </h3>
-
 
             <p>
                 Watch ads and earn
@@ -437,11 +420,9 @@
                 📝
             </div>
 
-
             <h3>
                 Tasks
             </h3>
-
 
             <p>
                 Complete tasks
@@ -450,7 +431,7 @@
         </div>
 
 
-        <!-- Referral -->
+        <!-- Refer -->
 
         <div
             class="card"
@@ -461,11 +442,9 @@
                 👥
             </div>
 
-
             <h3>
                 Refer
             </h3>
-
 
             <p>
                 Invite friends
@@ -485,11 +464,9 @@
                 💰
             </div>
 
-
             <h3>
                 Withdraw
             </h3>
-
 
             <p>
                 Withdraw Quicks
@@ -503,14 +480,14 @@
 
     <!-- =====================================
          WELCOME
-    ====================================== -->
+         ===================================== -->
+
 
     <div class="welcome">
 
         <h2>
             Welcome to Quick Gram! 👋
         </h2>
-
 
         <p>
             Complete tasks, watch ads and
@@ -519,10 +496,6 @@
 
     </div>
 
-
-    <!-- =====================================
-         LOADING
-    ====================================== -->
 
     <div
         id="loading"
@@ -535,7 +508,6 @@
 </div>
 
 
-
 <script>
 
 
@@ -546,14 +518,13 @@
 const tg =
     window.Telegram.WebApp;
 
-
 tg.ready();
 
 tg.expand();
 
 
 // =====================================================
-// API
+// QUICK GRAM API
 // =====================================================
 
 const API_URL =
@@ -569,38 +540,19 @@ const BOT_USERNAME =
 
 
 // =====================================================
+// REFERRAL REWARD DISPLAY
+// =====================================================
+
+const REFERRAL_REWARD =
+    100;
+
+
+// =====================================================
 // CURRENT USER
 // =====================================================
 
-let currentUser = null;
-
-
-// =====================================================
-// UPDATE BALANCE DISPLAY
-// =====================================================
-
-function updateBalanceDisplay(user) {
-
-    if (!user) {
-        return;
-    }
-
-
-    currentUser = user;
-
-
-    const balance =
-        Number(
-            user.balance || 0
-        );
-
-
-    document.getElementById(
-        "balance"
-    ).textContent =
-        balance.toLocaleString();
-
-}
+let currentUser =
+    null;
 
 
 // =====================================================
@@ -661,35 +613,33 @@ async function connectUser() {
         }
 
 
-        const user =
+        currentUser =
             data.user;
 
 
-        currentUser =
-            user;
-
-
-        // -----------------------------------------
+        // =====================================
         // NAME
-        // -----------------------------------------
+        // =====================================
 
         const name =
-            user.first_name ||
+            currentUser.first_name ||
             "User";
 
 
         document.getElementById(
             "username"
         ).textContent =
-            "Hello, " + name + "!";
+            "Hello, " +
+            name +
+            "!";
 
 
-        // -----------------------------------------
+        // =====================================
         // BALANCE
-        // -----------------------------------------
+        // =====================================
 
-        updateBalanceDisplay(
-            user
+        updateBalance(
+            currentUser.balance
         );
 
 
@@ -702,7 +652,7 @@ async function connectUser() {
     } catch (error) {
 
         console.error(
-            "Connection error:",
+            "Authentication error:",
             error
         );
 
@@ -729,7 +679,35 @@ async function connectUser() {
 
 
 // =====================================================
-// REFRESH USER FROM SERVER
+// UPDATE BALANCE ON SCREEN
+// =====================================================
+
+function updateBalance(
+    amount
+) {
+
+    const balance =
+        Number(amount || 0);
+
+
+    document.getElementById(
+        "balance"
+    ).textContent =
+        balance.toLocaleString();
+
+
+    if (currentUser) {
+
+        currentUser.balance =
+            balance;
+
+    }
+
+}
+
+
+// =====================================================
+// REFRESH USER DATA
 // =====================================================
 
 async function refreshUser() {
@@ -741,13 +719,13 @@ async function refreshUser() {
 
 
         if (!initData) {
-            return null;
+            return;
         }
 
 
         const response =
             await fetch(
-                API_URL + "/api/user",
+                API_URL + "/api/auth",
                 {
 
                     method: "POST",
@@ -772,23 +750,21 @@ async function refreshUser() {
             await response.json();
 
 
-        if (!response.ok) {
+        if (
+            response.ok &&
+            data.success &&
+            data.user
+        ) {
 
-            throw new Error(
-                data.error ||
-                "Could not refresh user"
+            currentUser =
+                data.user;
+
+
+            updateBalance(
+                data.user.balance
             );
 
         }
-
-
-        updateBalanceDisplay(
-            data.user
-        );
-
-
-        return data.user;
-
 
     } catch (error) {
 
@@ -796,9 +772,6 @@ async function refreshUser() {
             "Balance refresh error:",
             error
         );
-
-
-        return null;
 
     }
 
@@ -809,7 +782,8 @@ async function refreshUser() {
 // ADSGRAM
 // =====================================================
 
-let AdController = null;
+let AdController =
+    null;
 
 
 try {
@@ -891,15 +865,18 @@ async function watchAd() {
 // OPEN PAGE
 // =====================================================
 
-function openPage(page) {
+function openPage(
+    page
+) {
 
 
-    // =================================================
+    // =====================================
     // REFERRAL PAGE
-    // =================================================
+    // =====================================
 
-    if (page === "referral") {
-
+    if (
+        page === "referral"
+    ) {
 
         const user =
             tg.initDataUnsafe &&
@@ -917,9 +894,9 @@ function openPage(page) {
         }
 
 
-        // ---------------------------------------------
-        // REFERRAL CODE
-        // ---------------------------------------------
+        // ---------------------------------
+        // Referral code
+        // ---------------------------------
 
         const referralCode =
             "QG" +
@@ -927,9 +904,9 @@ function openPage(page) {
                 .slice(-8);
 
 
-        // ---------------------------------------------
-        // REFERRAL LINK
-        // ---------------------------------------------
+        // ---------------------------------
+        // Referral link
+        // ---------------------------------
 
         const referralLink =
             "https://t.me/" +
@@ -938,31 +915,30 @@ function openPage(page) {
             referralCode;
 
 
-        // ---------------------------------------------
-        // CURRENT STATS
-        // ---------------------------------------------
+        // ---------------------------------
+        // Current referral count
+        // ---------------------------------
 
         const referralCount =
             Number(
                 currentUser &&
                 currentUser.referral_count
-                    ? currentUser.referral_count
-                    : 0
+                || 0
             );
 
+
+        // ---------------------------------
+        // Referral earnings
+        // ---------------------------------
 
         const referralEarnings =
-            Number(
-                currentUser &&
-                currentUser.referral_earnings
-                    ? currentUser.referral_earnings
-                    : 0
-            );
+            referralCount *
+            REFERRAL_REWARD;
 
 
-        // ---------------------------------------------
-        // SHOW REFERRAL PAGE
-        // ---------------------------------------------
+        // ---------------------------------
+        // Show referral page
+        // ---------------------------------
 
         document.getElementById(
             "mainApp"
@@ -995,7 +971,6 @@ function openPage(page) {
                     👥 Refer & Earn
                 </h2>
 
-
                 <p>
                     Invite your friends to join
                     Quick Gram using your
@@ -1005,11 +980,7 @@ function openPage(page) {
 
                 <div class="referral-stats">
 
-                    <div class="stat-box">
-
-                        <div class="stat-label">
-                            Referrals
-                        </div>
+                    <div class="stat">
 
                         <div
                             class="stat-number"
@@ -1018,20 +989,24 @@ function openPage(page) {
                             ${referralCount}
                         </div>
 
+                        <div class="stat-label">
+                            Friends Referred
+                        </div>
+
                     </div>
 
 
-                    <div class="stat-box">
-
-                        <div class="stat-label">
-                            Referral Earnings
-                        </div>
+                    <div class="stat">
 
                         <div
                             class="stat-number"
                             id="referralEarnings"
                         >
-                            ${referralEarnings.toLocaleString()}
+                            ${referralEarnings}
+                        </div>
+
+                        <div class="stat-label">
+                            Referral Earnings
                         </div>
 
                     </div>
@@ -1063,9 +1038,7 @@ function openPage(page) {
                     class="referral-button copy-button"
                     onclick="copyReferralLink()"
                 >
-
                     📋 Copy Referral Link
-
                 </button>
 
 
@@ -1073,19 +1046,15 @@ function openPage(page) {
                     class="referral-button share-button"
                     onclick="shareReferralLink()"
                 >
-
                     📤 Share Referral Link
-
                 </button>
 
 
                 <button
                     class="referral-button back-button"
-                    onclick="location.reload()"
+                    onclick="goBackHome()"
                 >
-
                     ← Back
-
                 </button>
 
             </div>
@@ -1098,9 +1067,9 @@ function openPage(page) {
     }
 
 
-    // =================================================
+    // =====================================
     // OTHER PAGES
-    // =================================================
+    // =====================================
 
     tg.showAlert(
         page.toUpperCase() +
@@ -1207,6 +1176,17 @@ function shareReferralLink() {
 
 
 // =====================================================
+// BACK TO HOME
+// =====================================================
+
+async function goBackHome() {
+
+    location.reload();
+
+}
+
+
+// =====================================================
 // PROCESS REFERRAL
 // =====================================================
 
@@ -1242,20 +1222,23 @@ async function processReferral() {
         }
 
 
-        // ---------------------------------------------
-        // APPLY REFERRAL
-        // ---------------------------------------------
+        // =====================================
+        // Apply referral
+        // =====================================
 
         const response =
             await fetch(
-                API_URL + "/api/referral",
+                API_URL +
+                "/api/referral",
                 {
 
                     method: "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body: JSON.stringify({
@@ -1282,49 +1265,113 @@ async function processReferral() {
         );
 
 
-        // ---------------------------------------------
-        // IMPORTANT:
-        // Refresh user from server.
-        // This updates the main balance.
-        // ---------------------------------------------
+        // =====================================
+        // Successful referral
+        // =====================================
 
-        const refreshedUser =
-            await refreshUser();
+        if (
+            data.success &&
+            !data.alreadyApplied
+        ) {
 
-
-        if (data.success) {
-
+            // -----------------------------
+            // Update main balance immediately
+            // -----------------------------
 
             if (
-                data.alreadyApplied
+                data.balance !==
+                undefined
             ) {
 
-                console.log(
-                    "Referral was already applied."
-                );
-
-
-            } else {
-
-                tg.showAlert(
-                    "🎉 Referral applied successfully!"
+                updateBalance(
+                    data.balance
                 );
 
             }
 
-        } else {
 
-            console.error(
-                "Referral failed:",
-                data.error
+            // -----------------------------
+            // Update current user
+            // -----------------------------
+
+            if (currentUser) {
+
+                currentUser.balance =
+                    Number(
+                        data.balance ||
+                        currentUser.balance ||
+                        0
+                    );
+
+
+                currentUser.referral_count =
+                    Number(
+                        data.referralCount ||
+                        currentUser.referral_count ||
+                        0
+                    );
+
+            }
+
+
+            tg.showAlert(
+
+                "🎉 Referral successful!\n\n" +
+
+                "+" +
+                Number(
+                    data.reward ||
+                    REFERRAL_REWARD
+                ) +
+                " Quicks added to your balance!"
+
             );
 
         }
 
 
-        // ---------------------------------------------
+        // =====================================
+        // Already applied
+        // =====================================
+
+        else if (
+            data.success &&
+            data.alreadyApplied
+        ) {
+
+            if (
+                data.balance !==
+                undefined
+            ) {
+
+                updateBalance(
+                    data.balance
+                );
+
+            }
+
+        }
+
+
+        // =====================================
+        // Error
+        // =====================================
+
+        else if (
+            !data.success
+        ) {
+
+            console.error(
+                "Referral failed:",
+                data
+            );
+
+        }
+
+
+        // =====================================
         // Remove ?ref= from URL
-        // ---------------------------------------------
+        // =====================================
 
         window.history.replaceState(
             {},
@@ -1336,7 +1383,7 @@ async function processReferral() {
     } catch (error) {
 
         console.error(
-            "Referral processing error:",
+            "Referral error:",
             error
         );
 
@@ -1346,13 +1393,16 @@ async function processReferral() {
 
 
 // =====================================================
-// START APP
+// START
 // =====================================================
 
 connectUser().then(
-    () => processReferral()
-);
+    () => {
 
+        processReferral();
+
+    }
+);
 
 </script>
 
