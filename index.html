@@ -478,11 +478,14 @@ async function watchAd() {
 
         const botUsername = "Quick_Gram_bot";
 
-        const referralLink =
-            "https://t.me/" +
-            botUsername +
-            "?start=ref_" +
-            user.id;
+        const referralCode =
+    "QG" + String(user.id).slice(-8);
+
+const referralLink =
+    "https://t.me/" +
+    botUsername +
+    "?start=ref_" +
+    referralCode;
 
         tg.showAlert(
             "Invite your friends!\n\n" +
