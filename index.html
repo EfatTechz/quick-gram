@@ -27,57 +27,86 @@
 }
 
 body {
+
     font-family: Arial, sans-serif;
+
     background: #f4f7fb;
+
     color: #111827;
+
     min-height: 100vh;
 }
 
 .app {
+
     max-width: 600px;
+
     margin: auto;
+
     padding: 20px;
 }
 
 .header {
+
     display: flex;
+
     align-items: center;
+
     gap: 12px;
+
     margin-bottom: 25px;
 }
 
 .logo {
+
     width: 52px;
+
     height: 52px;
+
     border-radius: 16px;
+
     background: #229ed9;
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     color: white;
+
     font-size: 25px;
+
     font-weight: bold;
 }
 
 .header h1 {
+
     font-size: 24px;
 }
 
 .header p {
+
     color: #6b7280;
+
     margin-top: 3px;
 }
 
 .balance {
-    background: linear-gradient(
-        135deg,
-        #229ed9,
-        #1677b8
-    );
+
+    background:
+        linear-gradient(
+            135deg,
+            #229ed9,
+            #1677b8
+        );
 
     color: white;
+
     padding: 25px;
+
     border-radius: 22px;
+
     margin-bottom: 20px;
 
     box-shadow:
@@ -86,30 +115,44 @@ body {
 }
 
 .balance-title {
+
     opacity: .85;
+
     font-size: 14px;
 }
 
 .balance-number {
+
     font-size: 38px;
+
     font-weight: bold;
+
     margin-top: 8px;
 }
 
 .coin {
+
     font-size: 18px;
 }
 
 .grid {
+
     display: grid;
-    grid-template-columns: 1fr 1fr;
+
+    grid-template-columns:
+        1fr 1fr;
+
     gap: 14px;
 }
 
 .card {
+
     background: white;
+
     border-radius: 18px;
+
     padding: 22px;
+
     text-align: center;
 
     box-shadow:
@@ -117,56 +160,86 @@ body {
         rgba(0,0,0,.06);
 
     cursor: pointer;
+
     transition: .15s;
 }
 
 .card:active {
+
     transform: scale(.97);
 }
 
 .icon {
+
     font-size: 30px;
+
     margin-bottom: 10px;
 }
 
 .card h3 {
+
     font-size: 16px;
+
     margin-bottom: 5px;
 }
 
 .card p {
+
     font-size: 12px;
+
     color: #6b7280;
 }
 
 .welcome {
+
     background: white;
+
     border-radius: 18px;
+
     padding: 20px;
+
     margin-top: 20px;
 }
 
 .welcome h2 {
+
     font-size: 18px;
+
     margin-bottom: 8px;
 }
 
 .welcome p {
+
     color: #6b7280;
+
     line-height: 1.5;
 }
 
 .loading {
+
     text-align: center;
+
     margin-top: 30px;
+
     color: #6b7280;
 }
 
-/* Referral */
+
+/* =================================
+   REFERRAL PAGE
+================================= */
+
+.referral-page {
+
+    display: none;
+}
 
 .referral-card {
+
     background: white;
+
     border-radius: 20px;
+
     padding: 22px;
 
     box-shadow:
@@ -175,75 +248,206 @@ body {
 }
 
 .referral-card h2 {
-    margin-bottom: 10px;
+
+    margin-bottom: 8px;
 }
 
-.referral-card p {
+.referral-description {
+
     color: #6b7280;
+
     line-height: 1.5;
+
+    margin-bottom: 18px;
 }
 
-.referral-link-box {
-    width: 100%;
-    margin-top: 18px;
-    padding: 13px;
 
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
+/* Statistics */
 
-    background: #f9fafb;
+.referral-stats {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+.stat-card {
+
+    background: #f4f7fb;
+
+    border-radius: 15px;
+
+    padding: 18px;
+
+    text-align: center;
+}
+
+.stat-icon {
+
+    font-size: 25px;
+
+    margin-bottom: 7px;
+}
+
+.stat-title {
+
+    font-size: 12px;
+
+    color: #6b7280;
+
+    margin-bottom: 5px;
+}
+
+.stat-number {
+
+    font-size: 22px;
+
+    font-weight: bold;
+
     color: #111827;
-
-    font-size: 13px;
 }
 
-.referral-button {
-    width: 100%;
-    border: none;
+
+/* Referral code */
+
+.referral-code-box {
+
+    background: #f4f7fb;
+
     border-radius: 12px;
 
     padding: 14px;
+
+    text-align: center;
+
+    margin-bottom: 14px;
+}
+
+.referral-code-title {
+
+    font-size: 12px;
+
+    color: #6b7280;
+
+    margin-bottom: 6px;
+}
+
+.referral-code-value {
+
+    font-size: 19px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+
+/* Link */
+
+.referral-link-box {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border:
+        1px solid #d1d5db;
+
+    border-radius: 10px;
+
+    background: #f9fafb;
+
+    color: #111827;
+
+    font-size: 12px;
+
+    margin-bottom: 2px;
+}
+
+
+/* Buttons */
+
+.referral-button {
+
+    width: 100%;
+
+    border: none;
+
+    border-radius: 12px;
+
+    padding: 14px;
+
     margin-top: 12px;
 
     font-size: 15px;
+
     font-weight: bold;
 
     cursor: pointer;
 }
 
 .copy-button {
+
     background: #229ed9;
+
     color: white;
 }
 
 .share-button {
+
     background: #16a34a;
+
     color: white;
 }
 
 .back-button {
+
     background: #e5e7eb;
+
     color: #111827;
 }
 
-.referral-code {
-    margin-top: 15px;
-    padding: 12px;
 
-    background: #f4f7fb;
-    border-radius: 10px;
+/* Reward info */
+
+.reward-info {
 
     text-align: center;
-    font-weight: bold;
+
+    margin-top: 18px;
+
+    padding: 13px;
+
+    background: #eff6ff;
+
+    border-radius: 12px;
+
+    color: #1d4ed8;
+
+    font-size: 13px;
+
+    line-height: 1.5;
 }
 
 </style>
 
 </head>
 
+
 <body>
 
+
 <div class="app" id="mainApp">
+
+
+    <!-- =================================
+         MAIN HEADER
+    ================================= -->
 
     <div class="header">
 
@@ -266,6 +470,10 @@ body {
     </div>
 
 
+    <!-- =================================
+         BALANCE
+    ================================= -->
+
     <div class="balance">
 
         <div class="balance-title">
@@ -287,7 +495,12 @@ body {
     </div>
 
 
+    <!-- =================================
+         MAIN CARDS
+    ================================= -->
+
     <div class="grid">
+
 
         <!-- Earn -->
 
@@ -379,6 +592,10 @@ body {
     </div>
 
 
+    <!-- =================================
+         WELCOME
+    ================================= -->
+
     <div class="welcome">
 
         <h2>
@@ -405,13 +622,16 @@ body {
 
 <script>
 
+
 // =====================================
 // TELEGRAM
 // =====================================
 
-const tg = window.Telegram.WebApp;
+const tg =
+    window.Telegram.WebApp;
 
 tg.ready();
+
 tg.expand();
 
 
@@ -432,7 +652,7 @@ const BOT_USERNAME =
 
 
 // =====================================
-// GLOBAL USER
+// CURRENT USER
 // =====================================
 
 let currentUser = null;
@@ -463,6 +683,7 @@ async function connectUser() {
             await fetch(
                 API_URL + "/api/auth",
                 {
+
                     method: "POST",
 
                     headers: {
@@ -470,10 +691,12 @@ async function connectUser() {
                             "application/json"
                     },
 
-                    body: JSON.stringify({
-                        initData:
-                            initData
-                    })
+                    body:
+                        JSON.stringify({
+                            initData:
+                                initData
+                        })
+
                 }
             );
 
@@ -496,7 +719,9 @@ async function connectUser() {
             data.user;
 
 
+        // =================================
         // USER NAME
+        // =================================
 
         const name =
             currentUser.first_name ||
@@ -506,17 +731,18 @@ async function connectUser() {
         document.getElementById(
             "username"
         ).textContent =
-            "Hello, " + name + "!";
+            "Hello, " +
+            name +
+            "!";
 
 
+        // =================================
         // BALANCE
+        // =================================
 
-        document.getElementById(
-            "balance"
-        ).textContent =
-            Number(
-                currentUser.balance || 0
-            ).toLocaleString();
+        updateBalance(
+            currentUser.balance
+        );
 
 
         document.getElementById(
@@ -525,15 +751,9 @@ async function connectUser() {
             "Account connected ✓";
 
 
-        return true;
-
-
     } catch (error) {
 
-        console.error(
-            "Connection error:",
-            error
-        );
+        console.error(error);
 
 
         document.getElementById(
@@ -552,208 +772,23 @@ async function connectUser() {
             "Could not connect to Quick Gram."
         );
 
-
-        return false;
-
     }
 
 }
 
 
 // =====================================
-// PROCESS REFERRAL
+// UPDATE BALANCE
 // =====================================
 
-async function processReferral() {
-
-    try {
-
-        /*
-         * Telegram WebApp can provide the
-         * start parameter through initDataUnsafe.
-         */
-
-        let referralCode = null;
-
-
-        // ---------------------------------
-        // METHOD 1
-        // Telegram start_param
-        // ---------------------------------
-
-        if (
-            tg.initDataUnsafe &&
-            tg.initDataUnsafe.start_param
-        ) {
-
-            const startParam =
-                tg.initDataUnsafe.start_param;
-
-
-            if (
-                startParam.startsWith("ref_")
-            ) {
-
-                referralCode =
-                    startParam.substring(4);
-
-            }
-
-        }
-
-
-        // ---------------------------------
-        // METHOD 2
-        // Normal URL ?ref=
-        // ---------------------------------
-
-        if (!referralCode) {
-
-            const params =
-                new URLSearchParams(
-                    window.location.search
-                );
-
-
-            const urlReferral =
-                params.get("ref");
-
-
-            if (urlReferral) {
-
-                referralCode =
-                    urlReferral;
-
-            }
-
-        }
-
-
-        // ---------------------------------
-        // No referral
-        // ---------------------------------
-
-        if (!referralCode) {
-
-            console.log(
-                "No referral code found."
-            );
-
-            return;
-
-        }
-
-
-        console.log(
-            "Referral code:",
-            referralCode
-        );
-
-
-        // ---------------------------------
-        // Telegram authentication
-        // ---------------------------------
-
-        const initData =
-            tg.initData;
-
-
-        if (!initData) {
-
-            console.error(
-                "Telegram initData missing"
-            );
-
-            return;
-
-        }
-
-
-        // ---------------------------------
-        // Send referral to server
-        // ---------------------------------
-
-        const response =
-            await fetch(
-                API_URL + "/api/referral",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-
-                        initData:
-                            initData,
-
-                        referralCode:
-                            referralCode
-
-                    })
-                }
-            );
-
-
-        const data =
-            await response.json();
-
-
-        console.log(
-            "Referral API response:",
-            data
-        );
-
-
-        // ---------------------------------
-        // Successful referral
-        // ---------------------------------
-
-        if (response.ok && data.success) {
-
-            tg.showAlert(
-                "🎉 Referral applied successfully!"
-            );
-
-            return;
-
-        }
-
-
-        // ---------------------------------
-        // Already referred
-        // ---------------------------------
-
-        if (
-            data.message ===
-            "Referral already applied"
-        ) {
-
-            console.log(
-                "Referral was already applied."
-            );
-
-            return;
-
-        }
-
-
-        console.error(
-            "Referral failed:",
-            data
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Referral processing error:",
-            error
-        );
-
-    }
+function updateBalance(balance) {
+
+    document.getElementById(
+        "balance"
+    ).textContent =
+        Number(
+            balance || 0
+        ).toLocaleString();
 
 }
 
@@ -834,144 +869,19 @@ async function watchAd() {
 
 
 // =====================================
-// OPEN PAGES
+// OPEN PAGE
 // =====================================
 
-function openPage(page) {
+async function openPage(page) {
 
 
     // =================================
-    // REFERRAL PAGE
+    // REFERRAL
     // =================================
 
     if (page === "referral") {
 
-        const user =
-            tg.initDataUnsafe &&
-            tg.initDataUnsafe.user;
-
-
-        if (!user) {
-
-            tg.showAlert(
-                "Please open Quick Gram inside Telegram."
-            );
-
-            return;
-
-        }
-
-
-        // UNIQUE REFERRAL CODE
-
-        const referralCode =
-            "QG" +
-            String(user.id)
-                .slice(-8);
-
-
-        // REFERRAL LINK
-
-        const referralLink =
-            "https://t.me/" +
-            BOT_USERNAME +
-            "?start=ref_" +
-            referralCode;
-
-
-        // DISPLAY REFERRAL PAGE
-
-        document.getElementById(
-            "mainApp"
-        ).innerHTML = `
-
-            <div class="header">
-
-                <div class="logo">
-                    Q
-                </div>
-
-                <div>
-
-                    <h1>
-                        Quick Gram
-                    </h1>
-
-                    <p>
-                        Refer & Earn
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="referral-card">
-
-                <h2>
-                    👥 Refer & Earn
-                </h2>
-
-
-                <p>
-                    Invite your friends to
-                    join Quick Gram using
-                    your personal referral link.
-                </p>
-
-
-                <div class="referral-code">
-
-                    Your Referral Code:
-
-                    <br><br>
-
-                    ${referralCode}
-
-                </div>
-
-
-                <input
-                    id="referralLink"
-                    class="referral-link-box"
-                    type="text"
-                    value="${referralLink}"
-                    readonly
-                >
-
-
-                <button
-                    class="referral-button copy-button"
-                    onclick="copyReferralLink()"
-                >
-
-                    📋 Copy Referral Link
-
-                </button>
-
-
-                <button
-                    class="referral-button share-button"
-                    onclick="shareReferralLink()"
-                >
-
-                    📤 Share Referral Link
-
-                </button>
-
-
-                <button
-                    class="referral-button back-button"
-                    onclick="location.reload()"
-                >
-
-                    ← Back
-
-                </button>
-
-            </div>
-
-        `;
+        await showReferralPage();
 
         return;
 
@@ -986,6 +896,337 @@ function openPage(page) {
         page.toUpperCase() +
         " will be added soon!"
     );
+
+}
+
+
+// =====================================
+// SHOW REFERRAL PAGE
+// =====================================
+
+async function showReferralPage() {
+
+    const user =
+        tg.initDataUnsafe &&
+        tg.initDataUnsafe.user;
+
+
+    if (!user) {
+
+        tg.showAlert(
+            "Please open Quick Gram inside Telegram."
+        );
+
+        return;
+
+    }
+
+
+    // =================================
+    // CREATE REFERRAL CODE
+    // =================================
+
+    let referralCode;
+
+
+    if (
+        currentUser &&
+        currentUser.referral_code
+    ) {
+
+        referralCode =
+            currentUser.referral_code;
+
+    } else {
+
+        referralCode =
+            "QG" +
+            String(user.id)
+                .slice(-8);
+
+    }
+
+
+    // =================================
+    // REFERRAL LINK
+    // =================================
+
+    const referralLink =
+        "https://t.me/" +
+        BOT_USERNAME +
+        "?start=ref_" +
+        referralCode;
+
+
+    // =================================
+    // GET REFERRAL STATS
+    // =================================
+
+    let referralCount = 0;
+
+    let referralEarnings = 0;
+
+
+    try {
+
+        const response =
+            await fetch(
+                API_URL +
+                "/api/referral-stats",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            initData:
+                                tg.initData
+                        })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            response.ok &&
+            data.success
+        ) {
+
+            referralCount =
+                Number(
+                    data.referralCount ||
+                    0
+                );
+
+
+            referralEarnings =
+                Number(
+                    data.referralEarnings ||
+                    0
+                );
+
+
+            if (data.referralCode) {
+
+                referralCode =
+                    data.referralCode;
+
+            }
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Referral stats error:",
+            error
+        );
+
+    }
+
+
+    // =================================
+    // CREATE FINAL LINK
+    // =================================
+
+    const finalReferralLink =
+        "https://t.me/" +
+        BOT_USERNAME +
+        "?start=ref_" +
+        referralCode;
+
+
+    // =================================
+    // REPLACE MAIN PAGE
+    // =================================
+
+    document.getElementById(
+        "mainApp"
+    ).innerHTML = `
+
+        <div class="header">
+
+            <div class="logo">
+                Q
+            </div>
+
+            <div>
+
+                <h1>
+                    Quick Gram
+                </h1>
+
+                <p>
+                    Refer & Earn
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="referral-card">
+
+            <h2>
+                👥 Refer & Earn
+            </h2>
+
+            <p class="referral-description">
+
+                Invite your friends to
+                Quick Gram and earn
+                Quicks when they join
+                using your referral link.
+
+            </p>
+
+
+            <!-- =========================
+                 STATISTICS
+            ========================== -->
+
+            <div class="referral-stats">
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        👥
+                    </div>
+
+                    <div class="stat-title">
+                        Total Referrals
+                    </div>
+
+                    <div
+                        class="stat-number"
+                        id="referralCount"
+                    >
+                        ${referralCount}
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        💰
+                    </div>
+
+                    <div class="stat-title">
+                        Referral Earnings
+                    </div>
+
+                    <div
+                        class="stat-number"
+                        id="referralEarnings"
+                    >
+                        ${referralEarnings.toLocaleString()}
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- =========================
+                 REFERRAL CODE
+            ========================== -->
+
+            <div class="referral-code-box">
+
+                <div class="referral-code-title">
+                    Your Referral Code
+                </div>
+
+                <div class="referral-code-value">
+                    ${referralCode}
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 REFERRAL LINK
+            ========================== -->
+
+            <input
+                id="referralLink"
+                class="referral-link-box"
+                type="text"
+                value="${finalReferralLink}"
+                readonly
+            >
+
+
+            <!-- =========================
+                 COPY
+            ========================== -->
+
+            <button
+                class="referral-button copy-button"
+                onclick="copyReferralLink()"
+            >
+
+                📋 Copy Referral Link
+
+            </button>
+
+
+            <!-- =========================
+                 SHARE
+            ========================== -->
+
+            <button
+                class="referral-button share-button"
+                onclick="shareReferralLink()"
+            >
+
+                📤 Share Referral Link
+
+            </button>
+
+
+            <!-- =========================
+                 REWARD INFO
+            ========================== -->
+
+            <div class="reward-info">
+
+                🎁 You earn
+                <strong>100 Quicks</strong>
+                for every successful referral.
+
+            </div>
+
+
+            <!-- =========================
+                 BACK
+            ========================== -->
+
+            <button
+                class="referral-button back-button"
+                onclick="location.reload()"
+            >
+
+                ← Back
+
+            </button>
+
+        </div>
+
+    `;
 
 }
 
@@ -1087,19 +1328,117 @@ function shareReferralLink() {
 
 
 // =====================================
-// START APPLICATION
+// PROCESS REFERRAL
+// =====================================
+
+async function processReferral() {
+
+    try {
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const referralCode =
+            params.get("ref");
+
+
+        if (!referralCode) {
+            return;
+        }
+
+
+        const initData =
+            tg.initData;
+
+
+        if (!initData) {
+            return;
+        }
+
+
+        const response =
+            await fetch(
+                API_URL +
+                "/api/referral",
+                {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            initData:
+                                initData,
+
+                            referralCode:
+                                referralCode
+
+                        })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Referral result:",
+            data
+        );
+
+
+        if (
+            data.success &&
+            !data.alreadyApplied
+        ) {
+
+            tg.showAlert(
+                "🎉 Referral applied!\n\nThe referrer earned 100 Quicks."
+            );
+
+        }
+
+
+        // =================================
+        // REMOVE REFERRAL PARAMETER
+        // =================================
+
+        window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Referral error:",
+            error
+        );
+
+    }
+
+}
+
+
+// =====================================
+// START
 // =====================================
 
 async function startApp() {
 
-    const connected =
-        await connectUser();
-
-
-    if (!connected) {
-        return;
-    }
-
+    await connectUser();
 
     await processReferral();
 
