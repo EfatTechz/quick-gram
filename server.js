@@ -8,7 +8,7 @@ const { createClient } = require("@supabase/supabase-js");
 const app = express();
 
 app.use(cors({
-origin: "https://efattechz.github.io"
+    origin: "https://efattechz.github.io"
 }));
 
 app.use(express.json());
@@ -20,141 +20,81 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
 const WEBAPP_URL =
-"https://efattechz.github.io/quick-gram/";
+    "https://efattechz.github.io/quick-gram/";
 
-const REFERRAL_REWARD = 100;
 
-// =====================================
-// ENVIRONMENT CHECK
-// =====================================
+// =====================================================
+// ENVIRONMENT CHECKS
+// =====================================================
 
 if (!BOT_TOKEN) {
-console.error("BOT_TOKEN is missing");
+    console.error("BOT_TOKEN is missing");
 }
 
 if (!SUPABASE_URL) {
-console.error("SUPABASE_URL is missing");
+    console.error("SUPABASE_URL is missing");
 }
 
 if (!SUPABASE_SERVICE_KEY) {
-console.error("SUPABASE_SERVICE_KEY is missing");
+    console.error("SUPABASE_SERVICE_KEY is missing");
 }
 
-// =====================================
+
+// =====================================================
 // SUPABASE
-// =====================================
+// =====================================================
 
 const supabase = createClient(
-SUPABASE_URL,
-SUPABASE_SERVICE_KEY
+    SUPABASE_URL,
+    SUPABASE_SERVICE_KEY
 );
 
-// =====================================
+
+// =====================================================
 // TELEGRAM BOT
-// =====================================
+// =====================================================
 
 let bot = null;
 
 if (BOT_TOKEN) {
 
-bot = new TelegramBot(
-    BOT_TOKEN,
-    {
-        polling: true
-    }
-);
+    bot = new TelegramBot(
+        BOT_TOKEN,
+        {
+            polling: true
+        }
+    );
 
-console.log(
-    "Quick Gram Telegram bot started"
-);
+    console.log("Quick Gram Telegram bot started");
 
 
-bot.onText(
-    /^\/start(?:\s+(.+))?$/,
-    async (msg, match) => {
+    // =================================================
+    // /start
+    // =================================================
 
-        try {
+    bot.onText(
+        /^\/start(?:\s+(.+))?$/,
+        async (msg, match) => {
 
-            const chatId = msg.chat.id;
+            try {
 
-            const startParameter =
-                match && match[1]
-                    ? match[1].trim()
-                    : null;
+                const chatId = msg.chat.id;
 
-
-            // -----------------------------
-            // NORMAL START
-            // -----------------------------
-
-            if (!startParameter) {
-
-                await bot.sendMessage(
-                    chatId,
-                    "Welcome to Quick Gram! 🚀\n\nTap the button below to open the app.",
-                    {
-                        reply_markup: {
-                            inline_keyboard: [
-                                [
-                                    {
-                                        text: "🚀 Open Quick Gram",
-                                        web_app: {
-                                            url: WEBAPP_URL
-                                        }
-                                    }
-                                ]
-                            ]
-                        }
-                    }
-                );
-
-                return;
-            }
+                const startParameter =
+                    match && match[1]
+                        ? match[1].trim()
+                        : null;
 
 
-            // -----------------------------
-            // REFERRAL START
-            // -----------------------------
+                // -----------------------------------------
+                // NORMAL START
+                // -----------------------------------------
 
-            if (
-                startParameter.startsWith(
-                    "ref_"
-                )
-            ) {
-
-                const referralCode =
-                    startParameter.substring(4);
-
-
-                const {
-                    data: referrer,
-                    error
-                } =
-                    await supabase
-                        .from("users")
-                        .select(
-                            "telegram_id, referral_code"
-                        )
-                        .eq(
-                            "referral_code",
-                            referralCode
-                        )
-                        .maybeSingle();
-
-
-                if (error) {
-                    console.error(
-                        "Referral lookup error:",
-                        error
-                    );
-                }
-
-
-                if (!referrer) {
+                if (!startParameter) {
 
                     await bot.sendMessage(
                         chatId,
-                        "Welcome to Quick Gram! 🚀\n\nThe referral code is invalid, but you can still join.",
+                        "Welcome to Quick Gram! 🚀\n\nTap the button below to open the app.",
                         {
                             reply_markup: {
                                 inline_keyboard: [
@@ -175,17 +115,106 @@ bot.onText(
                 }
 
 
-                const referralWebAppURL =
-                    WEBAPP_URL +
-                    "?ref=" +
-                    encodeURIComponent(
-                        referralCode
+                // -----------------------------------------
+                // REFERRAL START
+                // -----------------------------------------
+
+                if (
+                    startParameter.startsWith("ref_")
+                ) {
+
+                    const referralCode =
+                        startParameter.substring(4);
+
+
+                    const {
+                        data: referrer,
+                        error
+                    } =
+                        await supabase
+                            .from("users")
+                            .select(
+                                "telegram_id, referral_code"
+                            )
+                            .eq(
+                                "referral_code",
+                                referralCode
+                            )
+                            .maybeSingle();
+
+
+                    if (error) {
+                        console.error(
+                            "Referral lookup error:",
+                            error
+                        );
+                    }
+
+
+                    if (!referrer) {
+
+                        await bot.sendMessage(
+                            chatId,
+                            "Welcome to Quick Gram! 🚀\n\nThe referral code is invalid, but you can still join.",
+                            {
+                                reply_markup: {
+                                    inline_keyboard: [
+                                        [
+                                            {
+                                                text: "🚀 Open Quick Gram",
+                                                web_app: {
+                                                    url: WEBAPP_URL
+                                                }
+                                            }
+                                        ]
+                                    ]
+                                }
+                            }
+                        );
+
+                        return;
+                    }
+
+
+                    const referralWebAppURL =
+                        WEBAPP_URL +
+                        "?ref=" +
+                        encodeURIComponent(
+                            referralCode
+                        );
+
+
+                    await bot.sendMessage(
+                        chatId,
+                        "🎉 You were invited to Quick Gram!\n\nOpen the app to continue.",
+                        {
+                            reply_markup: {
+                                inline_keyboard: [
+                                    [
+                                        {
+                                            text: "🚀 Open Quick Gram",
+                                            web_app: {
+                                                url:
+                                                    referralWebAppURL
+                                            }
+                                        }
+                                    ]
+                                ]
+                            }
+                        }
                     );
 
+                    return;
+                }
+
+
+                // -----------------------------------------
+                // UNKNOWN START PARAMETER
+                // -----------------------------------------
 
                 await bot.sendMessage(
                     chatId,
-                    "🎉 You were invited to Quick Gram!\n\nOpen the app to continue.",
+                    "Welcome to Quick Gram! 🚀",
                     {
                         reply_markup: {
                             inline_keyboard: [
@@ -193,7 +222,7 @@ bot.onText(
                                     {
                                         text: "🚀 Open Quick Gram",
                                         web_app: {
-                                            url: referralWebAppURL
+                                            url: WEBAPP_URL
                                         }
                                     }
                                 ]
@@ -202,257 +231,278 @@ bot.onText(
                     }
                 );
 
-                return;
+            } catch (error) {
+
+                console.error(
+                    "Telegram /start error:",
+                    error
+                );
+
             }
 
-
-            // -----------------------------
-            // UNKNOWN START PARAMETER
-            // -----------------------------
-
-            await bot.sendMessage(
-                chatId,
-                "Welcome to Quick Gram! 🚀",
-                {
-                    reply_markup: {
-                        inline_keyboard: [
-                            [
-                                {
-                                    text: "🚀 Open Quick Gram",
-                                    web_app: {
-                                        url: WEBAPP_URL
-                                    }
-                                }
-                            ]
-                        ]
-                    }
-                }
-            );
-
-        } catch (error) {
-
-            console.error(
-                "Telegram /start error:",
-                error
-            );
-
         }
+    );
+
+}
+
+
+// =====================================================
+// TELEGRAM INIT DATA VALIDATION
+// =====================================================
+
+function validateTelegramInitData(initData) {
+
+    if (!initData || !BOT_TOKEN) {
+        return null;
+    }
+
+
+    const params =
+        new URLSearchParams(initData);
+
+
+    const hash =
+        params.get("hash");
+
+
+    if (!hash) {
+        return null;
+    }
+
+
+    params.delete("hash");
+
+
+    const dataCheckString =
+        [...params.entries()]
+            .sort(([a], [b]) =>
+                a.localeCompare(b)
+            )
+            .map(
+                ([key, value]) =>
+                    `${key}=${value}`
+            )
+            .join("\n");
+
+
+    const secretKey =
+        crypto
+            .createHmac(
+                "sha256",
+                "WebAppData"
+            )
+            .update(BOT_TOKEN)
+            .digest();
+
+
+    const calculatedHash =
+        crypto
+            .createHmac(
+                "sha256",
+                secretKey
+            )
+            .update(dataCheckString)
+            .digest("hex");
+
+
+    if (calculatedHash !== hash) {
+        return null;
+    }
+
+
+    const authDate =
+        Number(
+            params.get("auth_date")
+        );
+
+
+    if (!authDate) {
+        return null;
+    }
+
+
+    const currentTime =
+        Math.floor(
+            Date.now() / 1000
+        );
+
+
+    if (
+        currentTime - authDate >
+        86400
+    ) {
+
+        return null;
+
+    }
+
+
+    const userString =
+        params.get("user");
+
+
+    if (!userString) {
+        return null;
+    }
+
+
+    try {
+
+        return JSON.parse(
+            userString
+        );
+
+    } catch {
+
+        return null;
+
+    }
+
+}
+
+
+// =====================================================
+// HEALTH CHECK
+// =====================================================
+
+app.get(
+    "/api/health",
+    (req, res) => {
+
+        res.json({
+            success: true,
+            app: "Quick Gram",
+            status: "online"
+        });
 
     }
 );
 
-}
 
-// =====================================
-// TELEGRAM INIT DATA VALIDATION
-// =====================================
-
-function validateTelegramInitData(
-initData
-) {
-
-if (
-    !initData ||
-    !BOT_TOKEN
-) {
-    return null;
-}
-
-
-const params =
-    new URLSearchParams(
-        initData
-    );
-
-
-const hash =
-    params.get("hash");
-
-
-if (!hash) {
-    return null;
-}
-
-
-params.delete("hash");
-
-
-const dataCheckString =
-    [...params.entries()]
-        .sort(
-            ([a], [b]) =>
-                a.localeCompare(b)
-        )
-        .map(
-            ([key, value]) =>
-                `${key}=${value}`
-        )
-        .join("\n");
-
-
-const secretKey =
-    crypto
-        .createHmac(
-            "sha256",
-            "WebAppData"
-        )
-        .update(BOT_TOKEN)
-        .digest();
-
-
-const calculatedHash =
-    crypto
-        .createHmac(
-            "sha256",
-            secretKey
-        )
-        .update(dataCheckString)
-        .digest("hex");
-
-
-if (
-    calculatedHash !== hash
-) {
-    return null;
-}
-
-
-const authDate =
-    Number(
-        params.get("auth_date")
-    );
-
-
-if (!authDate) {
-    return null;
-}
-
-
-const currentTime =
-    Math.floor(
-        Date.now() / 1000
-    );
-
-
-if (
-    currentTime - authDate >
-    86400
-) {
-    return null;
-}
-
-
-const userString =
-    params.get("user");
-
-
-if (!userString) {
-    return null;
-}
-
-
-try {
-
-    return JSON.parse(
-        userString
-    );
-
-} catch {
-
-    return null;
-
-}
-
-}
-
-// =====================================
-// HEALTH CHECK
-// =====================================
-
-app.get(
-"/api/health",
-(req, res) => {
-
-    res.json({
-        success: true,
-        app: "Quick Gram",
-        status: "online"
-    });
-
-}
-
-);
-
-// =====================================
+// =====================================================
 // AUTH / CREATE USER
-// =====================================
+// =====================================================
 
 app.post(
-"/api/auth",
-async (req, res) => {
+    "/api/auth",
+    async (req, res) => {
 
-    try {
-
-        const {
-            initData
-        } = req.body;
-
-
-        const user =
-            validateTelegramInitData(
-                initData
-            );
-
-
-        if (!user) {
-
-            return res.status(401).json({
-                success: false,
-                error:
-                    "Invalid Telegram authentication"
-            });
-
-        }
-
-
-        const referralCode =
-            "QG" +
-            String(user.id)
-                .slice(-8);
-
-
-        const {
-            data: existingUser,
-            error: findError
-        } =
-            await supabase
-                .from("users")
-                .select("*")
-                .eq(
-                    "telegram_id",
-                    user.id
-                )
-                .maybeSingle();
-
-
-        if (findError) {
-            throw findError;
-        }
-
-
-        // -----------------------------
-        // EXISTING USER
-        // -----------------------------
-
-        if (existingUser) {
+        try {
 
             const {
-                data: updatedUser,
+                initData
+            } = req.body;
+
+
+            const user =
+                validateTelegramInitData(
+                    initData
+                );
+
+
+            if (!user) {
+
+                return res.status(401).json({
+                    success: false,
+                    error:
+                        "Invalid Telegram authentication"
+                });
+
+            }
+
+
+            const referralCode =
+                "QG" +
+                String(user.id)
+                    .slice(-8);
+
+
+            const {
+                data: existingUser,
+                error: findError
+            } =
+                await supabase
+                    .from("users")
+                    .select("*")
+                    .eq(
+                        "telegram_id",
+                        user.id
+                    )
+                    .maybeSingle();
+
+
+            if (findError) {
+                throw findError;
+            }
+
+
+            // -----------------------------------------
+            // EXISTING USER
+            // -----------------------------------------
+
+            if (existingUser) {
+
+                const {
+                    data: updatedUser,
+                    error
+                } =
+                    await supabase
+                        .from("users")
+                        .update({
+
+                            username:
+                                user.username ||
+                                null,
+
+                            first_name:
+                                user.first_name ||
+                                null,
+
+                            last_name:
+                                user.last_name ||
+                                null,
+
+                            updated_at:
+                                new Date()
+                                    .toISOString()
+
+                        })
+                        .eq(
+                            "telegram_id",
+                            user.id
+                        )
+                        .select()
+                        .single();
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                return res.json({
+                    success: true,
+                    user: updatedUser
+                });
+
+            }
+
+
+            // -----------------------------------------
+            // NEW USER
+            // -----------------------------------------
+
+            const {
+                data: newUser,
                 error
             } =
                 await supabase
                     .from("users")
-                    .update({
+                    .insert({
+
+                        telegram_id:
+                            user.id,
+
                         username:
                             user.username ||
                             null,
@@ -465,14 +515,16 @@ async (req, res) => {
                             user.last_name ||
                             null,
 
-                        updated_at:
-                            new Date()
-                                .toISOString()
+                        balance: 0,
+
+                        referral_code:
+                            referralCode,
+
+                        referral_count: 0,
+
+                        referred_by: null
+
                     })
-                    .eq(
-                        "telegram_id",
-                        user.id
-                    )
                     .select()
                     .single();
 
@@ -484,387 +536,425 @@ async (req, res) => {
 
             return res.json({
                 success: true,
-                user: updatedUser
+                user: newUser
             });
 
-        }
 
+        } catch (error) {
 
-        // -----------------------------
-        // NEW USER
-        // -----------------------------
-
-        const {
-            data: newUser,
-            error
-        } =
-            await supabase
-                .from("users")
-                .insert({
-                    telegram_id:
-                        user.id,
-
-                    username:
-                        user.username ||
-                        null,
-
-                    first_name:
-                        user.first_name ||
-                        null,
-
-                    last_name:
-                        user.last_name ||
-                        null,
-
-                    balance: 0,
-
-                    referral_code:
-                        referralCode,
-
-                    referral_count: 0,
-
-                    referred_by: null
-                })
-                .select()
-                .single();
-
-
-        if (error) {
-            throw error;
-        }
-
-
-        return res.json({
-            success: true,
-            user: newUser
-        });
-
-
-    } catch (error) {
-
-        console.error(
-            "Auth error:",
-            error
-        );
-
-
-        return res.status(500).json({
-            success: false,
-            error:
-                "Server error"
-        });
-
-    }
-
-}
-
-);
-
-// =====================================
-// APPLY REFERRAL
-// =====================================
-
-app.post(
-"/api/referral",
-async (req, res) => {
-
-    try {
-
-        const {
-            initData,
-            referralCode
-        } = req.body;
-
-
-        // -----------------------------
-        // VALIDATE USER
-        // -----------------------------
-
-        const user =
-            validateTelegramInitData(
-                initData
+            console.error(
+                "Auth error:",
+                error
             );
 
 
-        if (!user) {
-
-            return res.status(401).json({
+            return res.status(500).json({
                 success: false,
                 error:
-                    "Invalid Telegram authentication"
+                    "Server error"
             });
 
         }
 
-
-        if (!referralCode) {
-
-            return res.status(400).json({
-                success: false,
-                error:
-                    "Referral code missing"
-            });
-
-        }
+    }
+);
 
 
-        // -----------------------------
-        // FIND REFERRER
-        // -----------------------------
+// =====================================================
+// GET CURRENT USER
+// =====================================================
+// This endpoint lets the Mini App refresh the balance
+// after a referral is applied.
 
-        const {
-            data: referrer,
-            error: referrerError
-        } =
-            await supabase
-                .from("users")
-                .select("*")
-                .eq(
-                    "referral_code",
-                    referralCode
-                )
-                .maybeSingle();
+app.post(
+    "/api/user",
+    async (req, res) => {
 
+        try {
 
-        if (referrerError) {
-            throw referrerError;
-        }
+            const {
+                initData
+            } = req.body;
 
 
-        if (!referrer) {
-
-            return res.status(404).json({
-                success: false,
-                error:
-                    "Referral code not found"
-            });
-
-        }
+            const user =
+                validateTelegramInitData(
+                    initData
+                );
 
 
-        // -----------------------------
-        // SELF REFERRAL
-        // -----------------------------
+            if (!user) {
 
-        if (
-            Number(referrer.telegram_id) ===
-            Number(user.id)
-        ) {
+                return res.status(401).json({
+                    success: false,
+                    error:
+                        "Invalid Telegram authentication"
+                });
 
-            return res.status(400).json({
-                success: false,
-                error:
-                    "You cannot refer yourself"
-            });
-
-        }
+            }
 
 
-        // -----------------------------
-        // FIND CURRENT USER
-        // -----------------------------
-
-        const {
-            data: currentUser,
-            error: currentUserError
-        } =
-            await supabase
-                .from("users")
-                .select("*")
-                .eq(
-                    "telegram_id",
-                    user.id
-                )
-                .maybeSingle();
+            const {
+                data: currentUser,
+                error
+            } =
+                await supabase
+                    .from("users")
+                    .select("*")
+                    .eq(
+                        "telegram_id",
+                        user.id
+                    )
+                    .maybeSingle();
 
 
-        if (currentUserError) {
-            throw currentUserError;
-        }
+            if (error) {
+                throw error;
+            }
 
 
-        if (!currentUser) {
+            if (!currentUser) {
 
-            return res.status(404).json({
-                success: false,
-                error:
-                    "User not found. Please reopen the app."
-            });
+                return res.status(404).json({
+                    success: false,
+                    error:
+                        "User not found"
+                });
 
-        }
+            }
 
-
-        // -----------------------------
-        // ALREADY REFERRED
-        // -----------------------------
-
-        if (
-            currentUser.referred_by
-        ) {
 
             return res.json({
                 success: true,
-                alreadyApplied: true,
-                message:
-                    "Referral already applied",
                 user: currentUser
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "User refresh error:",
+                error
+            );
+
+
+            return res.status(500).json({
+                success: false,
+                error:
+                    "Server error"
             });
 
         }
 
-
-        // =================================
-        // IMPORTANT:
-        // SAVE REFERRED_BY FIRST
-        // =================================
-
-        const {
-            error: setReferralError
-        } =
-            await supabase
-                .from("users")
-                .update({
-                    referred_by:
-                        referrer.telegram_id
-                })
-                .eq(
-                    "telegram_id",
-                    user.id
-                );
-
-
-        if (setReferralError) {
-            throw setReferralError;
-        }
-
-
-        // =================================
-        // ADD 100 QUICKS TO REFERRER
-        // =================================
-
-        const newBalance =
-            Number(
-                referrer.balance || 0
-            ) +
-            REFERRAL_REWARD;
-
-
-        const newReferralCount =
-            Number(
-                referrer.referral_count || 0
-            ) +
-            1;
-
-
-        const {
-            data: updatedReferrer,
-            error: updateReferrerError
-        } =
-            await supabase
-                .from("users")
-                .update({
-
-                    balance:
-                        newBalance,
-
-                    referral_count:
-                        newReferralCount,
-
-                    updated_at:
-                        new Date()
-                            .toISOString()
-
-                })
-                .eq(
-                    "telegram_id",
-                    referrer.telegram_id
-                )
-                .select()
-                .single();
-
-
-        if (updateReferrerError) {
-
-            // Roll back referred_by
-            await supabase
-                .from("users")
-                .update({
-                    referred_by: null
-                })
-                .eq(
-                    "telegram_id",
-                    user.id
-                );
-
-            throw updateReferrerError;
-        }
-
-
-        console.log(
-            `Referral success: ${user.id} referred by ${referrer.telegram_id}. +${REFERRAL_REWARD} Quicks`
-        );
-
-
-        // -----------------------------
-        // RESPONSE
-        // -----------------------------
-
-        return res.json({
-
-            success: true,
-
-            message:
-                `Referral applied! +${REFERRAL_REWARD} Quicks`,
-
-            reward:
-                REFERRAL_REWARD,
-
-            referrerBalance:
-                Number(
-                    updatedReferrer.balance || 0
-                ),
-
-            referralCount:
-                Number(
-                    updatedReferrer.referral_count || 0
-                )
-
-        });
-
-
-    } catch (error) {
-
-        console.error(
-            "Referral error:",
-            error
-        );
-
-
-        return res.status(500).json({
-            success: false,
-            error:
-                "Server error"
-        });
-
     }
-
-}
-
 );
 
-// =====================================
+
+// =====================================================
+// APPLY REFERRAL
+// =====================================================
+
+app.post(
+    "/api/referral",
+    async (req, res) => {
+
+        try {
+
+            const {
+                initData,
+                referralCode
+            } = req.body;
+
+
+            const user =
+                validateTelegramInitData(
+                    initData
+                );
+
+
+            if (!user) {
+
+                return res.status(401).json({
+                    success: false,
+                    error:
+                        "Invalid Telegram authentication"
+                });
+
+            }
+
+
+            if (!referralCode) {
+
+                return res.status(400).json({
+                    success: false,
+                    error:
+                        "Referral code missing"
+                });
+
+            }
+
+
+            // -----------------------------------------
+            // FIND REFERRER
+            // -----------------------------------------
+
+            const {
+                data: referrer,
+                error: referrerError
+            } =
+                await supabase
+                    .from("users")
+                    .select("*")
+                    .eq(
+                        "referral_code",
+                        referralCode
+                    )
+                    .maybeSingle();
+
+
+            if (referrerError) {
+                throw referrerError;
+            }
+
+
+            if (!referrer) {
+
+                return res.status(404).json({
+                    success: false,
+                    error:
+                        "Referral code not found"
+                });
+
+            }
+
+
+            // -----------------------------------------
+            // SELF REFERRAL
+            // -----------------------------------------
+
+            if (
+                Number(referrer.telegram_id) ===
+                Number(user.id)
+            ) {
+
+                return res.status(400).json({
+                    success: false,
+                    error:
+                        "You cannot refer yourself"
+                });
+
+            }
+
+
+            // -----------------------------------------
+            // FIND CURRENT USER
+            // -----------------------------------------
+
+            const {
+                data: currentUser,
+                error: userError
+            } =
+                await supabase
+                    .from("users")
+                    .select("*")
+                    .eq(
+                        "telegram_id",
+                        user.id
+                    )
+                    .maybeSingle();
+
+
+            if (userError) {
+                throw userError;
+            }
+
+
+            if (!currentUser) {
+
+                return res.status(404).json({
+                    success: false,
+                    error:
+                        "User not found"
+                });
+
+            }
+
+
+            // -----------------------------------------
+            // ALREADY REFERRED
+            // -----------------------------------------
+
+            if (currentUser.referred_by) {
+
+                return res.json({
+
+                    success: true,
+
+                    alreadyApplied: true,
+
+                    message:
+                        "Referral already applied",
+
+                    user: currentUser
+
+                });
+
+            }
+
+
+            // =========================================
+            // REFERRAL REWARD
+            // =========================================
+            // Change this number if you want another
+            // reward amount.
+
+            const REFERRAL_REWARD = 100;
+
+
+            // -----------------------------------------
+            // UPDATE NEW USER
+            // -----------------------------------------
+
+            const {
+                data: updatedCurrentUser,
+                error: updateUserError
+            } =
+                await supabase
+                    .from("users")
+                    .update({
+
+                        referred_by:
+                            referrer.telegram_id
+
+                    })
+                    .eq(
+                        "telegram_id",
+                        user.id
+                    )
+                    .select()
+                    .single();
+
+
+            if (updateUserError) {
+                throw updateUserError;
+            }
+
+
+            // -----------------------------------------
+            // CALCULATE REFERRER BALANCE
+            // -----------------------------------------
+
+            const newReferralCount =
+                Number(
+                    referrer.referral_count || 0
+                ) + 1;
+
+
+            const newReferralEarnings =
+                Number(
+                    referrer.referral_earnings || 0
+                ) + REFERRAL_REWARD;
+
+
+            const newBalance =
+                Number(
+                    referrer.balance || 0
+                ) + REFERRAL_REWARD;
+
+
+            // -----------------------------------------
+            // UPDATE REFERRER
+            // -----------------------------------------
+
+            const {
+                data: updatedReferrer,
+                error:
+                    updateReferrerError
+            } =
+                await supabase
+                    .from("users")
+                    .update({
+
+                        referral_count:
+                            newReferralCount,
+
+                        referral_earnings:
+                            newReferralEarnings,
+
+                        balance:
+                            newBalance
+
+                    })
+                    .eq(
+                        "telegram_id",
+                        referrer.telegram_id
+                    )
+                    .select()
+                    .single();
+
+
+            if (updateReferrerError) {
+                throw updateReferrerError;
+            }
+
+
+            // -----------------------------------------
+            // RETURN UPDATED REFERRER
+            // -----------------------------------------
+
+            return res.json({
+
+                success: true,
+
+                alreadyApplied: false,
+
+                message:
+                    "Referral applied successfully",
+
+                reward:
+                    REFERRAL_REWARD,
+
+                user:
+                    updatedReferrer,
+
+                referredUser:
+                    updatedCurrentUser
+
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "Referral error:",
+                error
+            );
+
+
+            return res.status(500).json({
+                success: false,
+                error:
+                    "Server error"
+            });
+
+        }
+
+    }
+);
+
+
+// =====================================================
 // START SERVER
-// =====================================
+// =====================================================
 
 app.listen(
-PORT,
-"0.0.0.0",
-() => {
+    PORT,
+    "0.0.0.0",
+    () => {
 
-    console.log(
-        `Quick Gram server running on port ${PORT}`
-    );
+        console.log(
+            `Quick Gram server running on port ${PORT}`
+        );
 
-}
-
+    }
 );
