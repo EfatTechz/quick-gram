@@ -220,7 +220,130 @@ app.post("/api/auth", async (req, res) => {
 
 });
 
+// -------------------------
+// Referral system
+// -------------------------
 
+app.post("/api/referral", async (req, res) => {
+
+    try {
+
+        const { initData, referralCode } = req.body;
+
+        const user = validateTelegramInitData(initData);
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                error: "Invalid Telegram authentication"
+            });
+        }
+
+        if (!referralCode) {
+            return res.status(400).json({
+                success: false,
+                error: "Referral code missing"
+            });
+        }
+
+        // Find the person who invited this user
+        const { data: referrer, error: referrerError } =
+            await supabase
+                .from("users")
+                .select("*")
+                .eq("referral_code", referralCode)
+                .maybeSingle();
+
+        if (referrerError) {
+            throw referrerError;
+        }
+
+        if (!referrer) {
+            return res.status(404).json({
+                success: false,
+                error: "Referral code not found"
+            });
+        }
+
+        // Prevent self-referral
+        if (referrer.telegram_id === user.id) {
+            return res.status(400).json({
+                success: false,
+                error: "You cannot refer yourself"
+            });
+        }
+
+        // Check current user
+        const { data: currentUser, error: userError } =
+            await supabase
+                .from("users")
+                .select("*")
+                .eq("telegram_id", user.id)
+                .maybeSingle();
+
+        if (userError) {
+            throw userError;
+        }
+
+        if (!currentUser) {
+            return res.status(404).json({
+                success: false,
+                error: "User not found"
+            });
+        }
+
+        // Don't allow changing referral after already referred
+        if (currentUser.referred_by) {
+            return res.json({
+                success: true,
+                message: "Referral already applied"
+            });
+        }
+
+        // Save referrer
+        const { error: updateUserError } =
+            await supabase
+                .from("users")
+                .update({
+                    referred_by: referrer.telegram_id
+                })
+                .eq("telegram_id", user.id);
+
+        if (updateUserError) {
+            throw updateUserError;
+        }
+
+        // Increase referral count
+        const { error: updateReferrerError } =
+            await supabase
+                .from("users")
+                .update({
+                    referral_count:
+                        (referrer.referral_count || 0) + 1
+                })
+                .eq("telegram_id", referrer.telegram_id);
+
+        if (updateReferrerError) {
+            throw updateReferrerError;
+        }
+
+        return res.json({
+            success: true,
+            message: "Referral applied"
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            error: "Server error"
+        });
+
+    }
+
+});
 // -------------------------
 // Start server
 // -------------------------
