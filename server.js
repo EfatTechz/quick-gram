@@ -6,8 +6,11 @@ const { createClient } = require("@supabase/supabase-js");
 
 const app = express();
 
-app.use(express.json());
+app.use(cors({
+    origin: "https://efattechz.github.io"
+}));
 
+app.use(express.json());
 const PORT = process.env.PORT || 10000;
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
