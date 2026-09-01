@@ -467,12 +467,37 @@ async function watchAd() {
 }
     function openPage(page) {
 
+    if (page === "referral") {
+
+        const user = tg.initDataUnsafe.user;
+
+        if (!user) {
+            tg.showAlert("Please open Quick Gram inside Telegram.");
+            return;
+        }
+
+        const botUsername = "Quick_Gram_bot";
+
+        const referralLink =
+            "https://t.me/" +
+            botUsername +
+            "?start=ref_" +
+            user.id;
+
         tg.showAlert(
-            page.toUpperCase() +
-            " will be added soon!"
+            "Invite your friends!\n\n" +
+            referralLink
         );
 
+        return;
     }
+
+    tg.showAlert(
+        page.toUpperCase() +
+        " will be added soon!"
+    );
+
+}
 
 
     connectUser();
