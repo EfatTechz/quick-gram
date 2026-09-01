@@ -880,6 +880,81 @@
     // START
     // =====================================
 
-    connectUser();
+    async function processReferral() {
+
+    try {
+
+        const params = new URLSearchParams(
+            window.location.search
+        );
+
+        const referralCode =
+            params.get("ref");
+
+        if (!referralCode) {
+            return;
+        }
+
+        const initData = tg.initData;
+
+        if (!initData) {
+            return;
+        }
+
+        const response = await fetch(
+            API_URL + "/api/referral",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    initData: initData,
+                    referralCode: referralCode
+                })
+            }
+        );
+
+        const data =
+            await response.json();
+
+        console.log(
+            "Referral result:",
+            data
+        );
+
+        if (data.success) {
+
+            tg.showAlert(
+                "🎉 Referral applied successfully!"
+            );
+
+        }
+
+        // Remove referral parameter from URL
+        window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Referral error:",
+            error
+        );
+
+    }
+
+}
+
+
+connectUser().then(() => {
+    processReferral();
+});
 
 </script></body></html>
