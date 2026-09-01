@@ -220,9 +220,9 @@
     <div class="grid">
 
         <div
-            class="card"
-            onclick="openPage('earn')"
-        >
+    class="card"
+    onclick="watchAd()"
+>
 
             <div class="icon">
                 📺
@@ -442,7 +442,29 @@
 
     }
 
+const AdController = window.Adsgram.init({
+    blockId: "45521"
+});
 
+async function watchAd() {
+
+    try {
+
+        const result = await AdController.show();
+
+        console.log("Ad completed:", result);
+
+        tg.showAlert("Ad completed! Reward will be added.");
+
+    } catch (error) {
+
+        console.error("AdsGram error:", error);
+
+        tg.showAlert("No ad available right now. Please try again.");
+
+    }
+
+}
     function openPage(page) {
 
         tg.showAlert(
